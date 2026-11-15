@@ -15,6 +15,7 @@ This mod switches such productions off automatically and switches them back on a
 - Only productions that you switched on yourself are managed. Productions you switched off stay off.
 - Outputs that are sold directly are not counted as full.
 - A small window on the left shows which productions are currently paused and why. Alt+O shows or hides it.
+- When an ingredient of a running production drops below 10 %, a short warning appears so you can refill in time.
 - Paused productions are kept in the savegame.
 - Works in singleplayer, multiplayer and on dedicated servers.
 
@@ -27,6 +28,7 @@ Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald all
 - Es werden nur Produktionen verwaltet, die du selbst eingeschaltet hast. Was du ausgeschaltet hast, bleibt aus.
 - Ausgänge, die direkt verkauft werden, gelten nie als voll.
 - Ein kleines Fenster links zeigt, welche Produktionen gerade pausiert sind und warum. Mit Alt+O blendest du es ein und aus.
+- Fällt eine Zutat einer laufenden Produktion unter 10 %, erscheint kurz ein Hinweis, damit du rechtzeitig auffüllen kannst.
 - Pausierte Produktionen bleiben im Spielstand erhalten.
 - Funktioniert im Einzelspieler, Multiplayer und auf Dedicated Servern.
 
@@ -39,6 +41,7 @@ Ce mod désactive automatiquement ces productions et les réactive dès que tous
 - Seules les productions que vous avez activées vous-même sont gérées. Celles que vous avez désactivées restent désactivées.
 - Les sorties vendues directement ne sont jamais considérées comme pleines.
 - Une petite fenêtre à gauche indique quelles productions sont en pause et pourquoi. Alt+O l'affiche ou la masque.
+- Lorsqu'un ingrédient d'une production en cours passe sous 10 %, un court avertissement apparaît pour que vous puissiez remplir à temps.
 - Les productions en pause sont conservées dans la sauvegarde.
 - Fonctionne en solo, en multijoueur et sur serveur dédié.
 
@@ -50,6 +53,7 @@ Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commenta
         <sourceFile filename="scripts/ProductionAutoPauseEvent.lua"/>
         <sourceFile filename="scripts/ProductionAutoPauseHud.lua"/>
         <sourceFile filename="scripts/ProductionAutoPause.lua"/>
+        <sourceFile filename="scripts/ProductionAutoPauseWarning.lua"/>
     </extraSourceFiles>
     <actions>
         <action name="PAP_TOGGLE_HUD"/>
@@ -79,6 +83,11 @@ Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commenta
             <en>storage full: %s</en>
             <de>Lager voll: %s</de>
             <fr>stockage plein : %s</fr>
+        </text>
+        <text name="pap_warning_low">
+            <en>WARNING: %s at %s almost empty, please refill</en>
+            <de>ACHTUNG: %s bei %s gleich alle, bitte auffüllen</de>
+            <fr>ATTENTION : %s à %s presque épuisé, merci de remplir</fr>
         </text>
         <text name="pap_hud_more">
             <en>+%d more</en>
