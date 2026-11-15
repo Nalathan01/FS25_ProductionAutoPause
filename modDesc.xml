@@ -14,6 +14,7 @@ This mod switches such productions off automatically and switches them back on a
 
 - Only productions that you switched on yourself are managed. Productions you switched off stay off.
 - Outputs that are sold directly are not counted as full.
+- A small window on the left shows which productions are currently paused and why. Alt+O shows or hides it.
 - Paused productions are kept in the savegame.
 - Works in singleplayer, multiplayer and on dedicated servers.
 
@@ -25,6 +26,7 @@ Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald all
 
 - Es werden nur Produktionen verwaltet, die du selbst eingeschaltet hast. Was du ausgeschaltet hast, bleibt aus.
 - Ausgänge, die direkt verkauft werden, gelten nie als voll.
+- Ein kleines Fenster links zeigt, welche Produktionen gerade pausiert sind und warum. Mit Alt+O blendest du es ein und aus.
 - Pausierte Produktionen bleiben im Spielstand erhalten.
 - Funktioniert im Einzelspieler, Multiplayer und auf Dedicated Servern.
 
@@ -36,6 +38,7 @@ Ce mod désactive automatiquement ces productions et les réactive dès que tous
 
 - Seules les productions que vous avez activées vous-même sont gérées. Celles que vous avez désactivées restent désactivées.
 - Les sorties vendues directement ne sont jamais considérées comme pleines.
+- Une petite fenêtre à gauche indique quelles productions sont en pause et pourquoi. Alt+O l'affiche ou la masque.
 - Les productions en pause sont conservées dans la sauvegarde.
 - Fonctionne en solo, en multijoueur et sur serveur dédié.
 
@@ -44,6 +47,43 @@ Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commenta
     </description>
     <multiplayer supported="true"/>
     <extraSourceFiles>
+        <sourceFile filename="scripts/ProductionAutoPauseEvent.lua"/>
+        <sourceFile filename="scripts/ProductionAutoPauseHud.lua"/>
         <sourceFile filename="scripts/ProductionAutoPause.lua"/>
     </extraSourceFiles>
+    <actions>
+        <action name="PAP_TOGGLE_HUD"/>
+    </actions>
+    <inputBinding>
+        <actionBinding action="PAP_TOGGLE_HUD">
+            <binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_o" axisComponent="+" neutralInput="0" index="1"/>
+        </actionBinding>
+    </inputBinding>
+    <l10n>
+        <text name="input_PAP_TOGGLE_HUD">
+            <en>Show/hide paused productions</en>
+            <de>Pausierte Produktionen ein/aus</de>
+            <fr>Afficher/masquer les productions en pause</fr>
+        </text>
+        <text name="pap_hud_title">
+            <en>Paused productions (%d)</en>
+            <de>Pausierte Produktionen (%d)</de>
+            <fr>Productions en pause (%d)</fr>
+        </text>
+        <text name="pap_hud_missing">
+            <en>missing: %s</en>
+            <de>fehlt: %s</de>
+            <fr>manque : %s</fr>
+        </text>
+        <text name="pap_hud_full">
+            <en>storage full: %s</en>
+            <de>Lager voll: %s</de>
+            <fr>stockage plein : %s</fr>
+        </text>
+        <text name="pap_hud_more">
+            <en>+%d more</en>
+            <de>+%d weitere</de>
+            <fr>+%d autres</fr>
+        </text>
+    </l10n>
 </modDesc>

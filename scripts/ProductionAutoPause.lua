@@ -2,8 +2,13 @@ ProductionAutoPause = {}
 ProductionAutoPause.modName = g_currentModName
 ProductionAutoPause.FILE_NAME = "FS25_ProductionAutoPause.xml"
 ProductionAutoPause.CHECK_INTERVAL = 5000
+ProductionAutoPause.REASON_UNKNOWN = 0
+ProductionAutoPause.REASON_MISSING_INPUT = 1
+ProductionAutoPause.REASON_OUTPUT_FULL = 2
 ProductionAutoPause.timer = 0
 ProductionAutoPause.paused = {}
+ProductionAutoPause.entries = {}
+ProductionAutoPause.entriesSignature = ""
 ProductionAutoPause.pending = nil
 ProductionAutoPause.isChanging = false
 
@@ -25,22 +30,22 @@ function ProductionAutoPause:isOutputStored(productionPoint, fillType)
     return productionPoint.storage:getIsFillTypeSupported(fillType)
 end
 
-function ProductionAutoPause:canRun(productionPoint, production)
+function ProductionAutoPause:getBlockReason(productionPoint, production)
     local storage = productionPoint.storage
 
     for _, input in pairs(production.inputs or {}) do
         if storage:getIsFillTypeSupported(input.type) and storage:getFillLevel(input.type) < input.amount then
-            return false
+            return ProductionAutoPause.REASON_MISSING_INPUT, input.type
         end
     end
 
     for _, output in pairs(production.outputs or {}) do
         if self:isOutputStored(productionPoint, output.type) and storage:getFreeCapacity(output.type) < output.amount then
-            return false
+            return ProductionAutoPause.REASON_OUTPUT_FULL, output.type
         end
     end
 
-    return true
+    return nil, nil
 end
 
 function ProductionAutoPause:setState(productionPoint, production, isEnabled)
@@ -54,18 +59,27 @@ function ProductionAutoPause:managePoint(productionPoint)
 
     for _, production in pairs(productionPoint.productions) do
         local isEnabled = production.status ~= ProductionPoint.PROD_STATUS.INACTIVE
-        local isPaused = pausedIds ~= nil and pausedIds[production.id] == true
+        local pausedInfo = pausedIds ~= nil and pausedIds[production.id] or nil
 
-        if isEnabled and not self:canRun(productionPoint, production) then
-            self:setState(productionPoint, production, false)
-            if pausedIds == nil then
-                pausedIds = {}
-                self.paused[productionPoint] = pausedIds
+        if isEnabled or pausedInfo ~= nil then
+            local reason, fillType = self:getBlockReason(productionPoint, production)
+
+            if isEnabled and reason ~= nil then
+                self:setState(productionPoint, production, false)
+                if pausedIds == nil then
+                    pausedIds = {}
+                    self.paused[productionPoint] = pausedIds
+                end
+                pausedIds[production.id] = {reason = reason, fillType = fillType}
+            elseif pausedInfo ~= nil and not isEnabled then
+                if reason == nil then
+                    pausedIds[production.id] = nil
+                    self:setState(productionPoint, production, true)
+                else
+                    pausedInfo.reason = reason
+                    pausedInfo.fillType = fillType
+                end
             end
-            pausedIds[production.id] = true
-        elseif isPaused and not isEnabled and self:canRun(productionPoint, production) then
-            pausedIds[production.id] = nil
-            self:setState(productionPoint, production, true)
         end
     end
 end
@@ -83,10 +97,42 @@ function ProductionAutoPause:applyPending()
             local pausedIds = {}
             for _, production in pairs(productionPoint.productions or {}) do
                 if ids[production.id] and production.status == ProductionPoint.PROD_STATUS.INACTIVE then
-                    pausedIds[production.id] = true
+                    pausedIds[production.id] = {reason = ProductionAutoPause.REASON_UNKNOWN, fillType = 0}
                 end
             end
             self.paused[productionPoint] = pausedIds
+        end
+    end
+end
+
+function ProductionAutoPause:buildEntries()
+    local entries = {}
+    local parts = {}
+
+    for _, productionPoint in ipairs(g_currentMission.productionChainManager.productionPoints) do
+        local pausedIds = self.paused[productionPoint]
+        if pausedIds ~= nil then
+            for _, production in pairs(productionPoint.productions) do
+                local info = pausedIds[production.id]
+                if info ~= nil then
+                    table.insert(entries, {productionPoint = productionPoint, productionId = production.id, reason = info.reason, fillType = info.fillType or 0})
+                    table.insert(parts, string.format("%s|%s|%d|%d", tostring(productionPoint.id), production.id, info.reason, info.fillType or 0))
+                end
+            end
+        end
+    end
+
+    return entries, table.concat(parts, ";")
+end
+
+function ProductionAutoPause:refreshEntries()
+    local entries, signature = self:buildEntries()
+    self.entries = entries
+
+    if signature ~= self.entriesSignature then
+        self.entriesSignature = signature
+        if g_server ~= nil and g_currentMission.missionDynamicInfo ~= nil and g_currentMission.missionDynamicInfo.isMultiplayer then
+            g_server:broadcastEvent(ProductionAutoPauseEvent.new(entries))
         end
     end
 end
@@ -112,6 +158,14 @@ function ProductionAutoPause:update(dt)
         end
     end
     self.paused = paused
+
+    self:refreshEntries()
+end
+
+function ProductionAutoPause:draw()
+    if ProductionAutoPauseHud ~= nil then
+        ProductionAutoPauseHud:draw(self.entries)
+    end
 end
 
 function ProductionAutoPause.onSetProductionState(productionPoint, productionId)
@@ -203,6 +257,8 @@ end
 
 function ProductionAutoPause:deleteMap()
     self.paused = {}
+    self.entries = {}
+    self.entriesSignature = ""
     self.pending = nil
     self.timer = 0
 end
@@ -217,4 +273,19 @@ end)
 
 FSCareerMissionInfo.saveToXMLFile = Utils.appendedFunction(FSCareerMissionInfo.saveToXMLFile, function()
     ProductionAutoPause:saveToSavegame()
+end)
+
+FSBaseMission.sendInitialClientState = Utils.appendedFunction(FSBaseMission.sendInitialClientState, function(mission, connection, user, farm)
+    connection:sendEvent(ProductionAutoPauseEvent.new(ProductionAutoPause.entries))
+end)
+
+PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.appendedFunction(PlayerInputComponent.registerGlobalPlayerActionEvents, function(inputComponent)
+    if inputComponent.player == nil or not inputComponent.player.isOwner then
+        return
+    end
+
+    local _, eventId = g_inputBinding:registerActionEvent(InputAction.PAP_TOGGLE_HUD, ProductionAutoPauseHud, ProductionAutoPauseHud.onToggleAction, false, true, false, true)
+    if eventId ~= nil then
+        g_inputBinding:setActionEventTextVisibility(eventId, false)
+    end
 end)
