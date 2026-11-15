@@ -22,10 +22,14 @@ function ProductionAutoPauseHud:getLines(entries)
                 local pointName = productionPoint.owningPlaceable ~= nil and productionPoint.owningPlaceable:getName() or ""
                 local text = string.format("%s: %s", pointName, production.name or entry.productionId)
 
-                local fillTypeTitle = nil
-                if entry.fillType ~= nil and entry.fillType > 0 then
-                    fillTypeTitle = g_fillTypeManager:getFillTypeTitleByIndex(entry.fillType)
+                local titles = {}
+                for _, fillType in ipairs(entry.fillTypes or {}) do
+                    local title = g_fillTypeManager:getFillTypeTitleByIndex(fillType)
+                    if title ~= nil then
+                        table.insert(titles, title)
+                    end
                 end
+                local fillTypeTitle = table.concat(titles, ", ")
 
                 if entry.reason == ProductionAutoPause.REASON_MISSING_INPUT then
                     text = text .. "  (" .. string.format(g_i18n:getText("pap_hud_missing"), fillTypeTitle or "") .. ")"

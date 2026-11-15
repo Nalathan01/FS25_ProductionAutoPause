@@ -33,16 +33,24 @@ end
 function ProductionAutoPause:getBlockReason(productionPoint, production)
     local storage = productionPoint.storage
 
+    local missing = {}
     for _, input in pairs(production.inputs or {}) do
         if storage:getIsFillTypeSupported(input.type) and storage:getFillLevel(input.type) < input.amount then
-            return ProductionAutoPause.REASON_MISSING_INPUT, input.type
+            table.insert(missing, input.type)
         end
     end
+    if #missing > 0 then
+        return ProductionAutoPause.REASON_MISSING_INPUT, missing
+    end
 
+    local full = {}
     for _, output in pairs(production.outputs or {}) do
         if self:isOutputStored(productionPoint, output.type) and storage:getFreeCapacity(output.type) < output.amount then
-            return ProductionAutoPause.REASON_OUTPUT_FULL, output.type
+            table.insert(full, output.type)
         end
+    end
+    if #full > 0 then
+        return ProductionAutoPause.REASON_OUTPUT_FULL, full
     end
 
     return nil, nil
@@ -62,7 +70,7 @@ function ProductionAutoPause:managePoint(productionPoint)
         local pausedInfo = pausedIds ~= nil and pausedIds[production.id] or nil
 
         if isEnabled or pausedInfo ~= nil then
-            local reason, fillType = self:getBlockReason(productionPoint, production)
+            local reason, fillTypes = self:getBlockReason(productionPoint, production)
 
             if isEnabled and reason ~= nil then
                 self:setState(productionPoint, production, false)
@@ -70,14 +78,14 @@ function ProductionAutoPause:managePoint(productionPoint)
                     pausedIds = {}
                     self.paused[productionPoint] = pausedIds
                 end
-                pausedIds[production.id] = {reason = reason, fillType = fillType}
+                pausedIds[production.id] = {reason = reason, fillTypes = fillTypes}
             elseif pausedInfo ~= nil and not isEnabled then
                 if reason == nil then
                     pausedIds[production.id] = nil
                     self:setState(productionPoint, production, true)
                 else
                     pausedInfo.reason = reason
-                    pausedInfo.fillType = fillType
+                    pausedInfo.fillTypes = fillTypes
                 end
             end
         end
@@ -97,7 +105,7 @@ function ProductionAutoPause:applyPending()
             local pausedIds = {}
             for _, production in pairs(productionPoint.productions or {}) do
                 if ids[production.id] and production.status == ProductionPoint.PROD_STATUS.INACTIVE then
-                    pausedIds[production.id] = {reason = ProductionAutoPause.REASON_UNKNOWN, fillType = 0}
+                    pausedIds[production.id] = {reason = ProductionAutoPause.REASON_UNKNOWN, fillTypes = {}}
                 end
             end
             self.paused[productionPoint] = pausedIds
@@ -115,8 +123,9 @@ function ProductionAutoPause:buildEntries()
             for _, production in pairs(productionPoint.productions) do
                 local info = pausedIds[production.id]
                 if info ~= nil then
-                    table.insert(entries, {productionPoint = productionPoint, productionId = production.id, reason = info.reason, fillType = info.fillType or 0})
-                    table.insert(parts, string.format("%s|%s|%d|%d", tostring(productionPoint.id), production.id, info.reason, info.fillType or 0))
+                    local fillTypes = info.fillTypes or {}
+                    table.insert(entries, {productionPoint = productionPoint, productionId = production.id, reason = info.reason, fillTypes = fillTypes})
+                    table.insert(parts, string.format("%s|%s|%d|%s", tostring(productionPoint.id), production.id, info.reason, table.concat(fillTypes, ",")))
                 end
             end
         end

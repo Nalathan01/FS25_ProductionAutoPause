@@ -20,9 +20,13 @@ function ProductionAutoPauseEvent:readStream(streamId, connection)
         local productionPoint = NetworkUtil.readNodeObject(streamId)
         local productionId = streamReadString(streamId)
         local reason = streamReadUInt8(streamId)
-        local fillType = streamReadUIntN(streamId, FillTypeManager.SEND_NUM_BITS)
+        local fillTypes = {}
+        local fillTypeCount = streamReadUInt8(streamId)
+        for _ = 1, fillTypeCount do
+            table.insert(fillTypes, streamReadUIntN(streamId, FillTypeManager.SEND_NUM_BITS))
+        end
         if productionPoint ~= nil then
-            table.insert(self.entries, {productionPoint = productionPoint, productionId = productionId, reason = reason, fillType = fillType})
+            table.insert(self.entries, {productionPoint = productionPoint, productionId = productionId, reason = reason, fillTypes = fillTypes})
         end
     end
     self:run(connection)
@@ -34,7 +38,11 @@ function ProductionAutoPauseEvent:writeStream(streamId, connection)
         NetworkUtil.writeNodeObject(streamId, entry.productionPoint)
         streamWriteString(streamId, entry.productionId)
         streamWriteUInt8(streamId, entry.reason)
-        streamWriteUIntN(streamId, entry.fillType or 0, FillTypeManager.SEND_NUM_BITS)
+        local fillTypes = entry.fillTypes or {}
+        streamWriteUInt8(streamId, #fillTypes)
+        for _, fillType in ipairs(fillTypes) do
+            streamWriteUIntN(streamId, fillType, FillTypeManager.SEND_NUM_BITS)
+        end
     end
 end
 
