@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc descVersion="115">
+    <author>Nalathan</author>
+    <version>1.0.0.0</version>
+    <title>
+        <en>Production Auto Pause</en>
+        <de>Produktionen Automatisch Pausieren</de>
+        <fr>Pause Automatique Des Productions</fr>
+    </title>
+    <description>
+        <en><![CDATA[In the base game, a production keeps running when ingredients are missing or the output storage is full. It produces nothing, but it still costs money every hour and slows down the other productions of the same building.
+
+This mod switches such productions off automatically and switches them back on as soon as all ingredients are available and there is room in the output storage again.
+
+- Only productions that you switched on yourself are managed. Productions you switched off stay off.
+- Outputs that are sold directly are not counted as full.
+- Paused productions are kept in the savegame.
+- Works in singleplayer, multiplayer and on dedicated servers.
+
+GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
+Bug reports please only via GitHub or Forbidden Mods. Comments on other download sites cannot be read or answered.]]></en>
+        <de><![CDATA[Im Grundspiel läuft eine Produktion weiter, wenn Zutaten fehlen oder das Ausgangslager voll ist. Sie stellt dann nichts her, kostet aber weiter jede Stunde Geld und bremst die anderen Produktionen im selben Gebäude.
+
+Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald alle Zutaten da sind und im Ausgangslager wieder Platz ist.
+
+- Es werden nur Produktionen verwaltet, die du selbst eingeschaltet hast. Was du ausgeschaltet hast, bleibt aus.
+- Ausgänge, die direkt verkauft werden, gelten nie als voll.
+- Pausierte Produktionen bleiben im Spielstand erhalten.
+- Funktioniert im Einzelspieler, Multiplayer und auf Dedicated Servern.
+
+GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
+Fehlermeldungen bitte nur über GitHub oder Forbidden Mods. Kommentare auf anderen Download-Seiten können nicht gelesen oder beantwortet werden.]]></de>
+        <fr><![CDATA[Dans le jeu de base, une production continue de tourner lorsqu'il manque des ingrédients ou que le stockage de sortie est plein. Elle ne produit rien, mais coûte toujours de l'argent chaque heure et ralentit les autres productions du même bâtiment.
+
+Ce mod désactive automatiquement ces productions et les réactive dès que tous les ingrédients sont disponibles et qu'il y a de nouveau de la place dans le stockage de sortie.
+
+- Seules les productions que vous avez activées vous-même sont gérées. Celles que vous avez désactivées restent désactivées.
+- Les sorties vendues directement ne sont jamais considérées comme pleines.
+- Les productions en pause sont conservées dans la sauvegarde.
+- Fonctionne en solo, en multijoueur et sur serveur dédié.
+
+GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
+Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commentaires sur les autres sites de téléchargement ne peuvent pas être lus ni traités.]]></fr>
+    </description>
+    <multiplayer supported="true"/>
+    <extraSourceFiles>
+        <sourceFile filename="scripts/ProductionAutoPause.lua"/>
+    </extraSourceFiles>
+</modDesc>
