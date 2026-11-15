@@ -17,7 +17,6 @@ This mod switches such productions off automatically and switches them back on a
 - A small window on the left shows which productions are currently paused and why. Alt+O shows or hides it.
 - When an ingredient of a running production drops below 10 %, a short warning appears so you can refill in time.
 - Paused productions are kept in the savegame.
-- Works in singleplayer, multiplayer and on dedicated servers.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
 Bug reports please only via GitHub or Forbidden Mods. Comments on other download sites cannot be read or answered.]]></en>
@@ -30,7 +29,6 @@ Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald all
 - Ein kleines Fenster links zeigt, welche Produktionen gerade pausiert sind und warum. Mit Alt+O blendest du es ein und aus.
 - Fällt eine Zutat einer laufenden Produktion unter 10 %, erscheint kurz ein Hinweis, damit du rechtzeitig auffüllen kannst.
 - Pausierte Produktionen bleiben im Spielstand erhalten.
-- Funktioniert im Einzelspieler, Multiplayer und auf Dedicated Servern.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
 Fehlermeldungen bitte nur über GitHub oder Forbidden Mods. Kommentare auf anderen Download-Seiten können nicht gelesen oder beantwortet werden.]]></de>
@@ -43,7 +41,6 @@ Ce mod désactive automatiquement ces productions et les réactive dès que tous
 - Une petite fenêtre à gauche indique quelles productions sont en pause et pourquoi. Alt+O l'affiche ou la masque.
 - Lorsqu'un ingrédient d'une production en cours passe sous 10 %, un court avertissement apparaît pour que vous puissiez remplir à temps.
 - Les productions en pause sont conservées dans la sauvegarde.
-- Fonctionne en solo, en multijoueur et sur serveur dédié.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
 Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commentaires sur les autres sites de téléchargement ne peuvent pas être lus ni traités.]]></fr>

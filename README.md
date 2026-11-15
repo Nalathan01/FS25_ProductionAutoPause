@@ -11,7 +11,6 @@ In the base game a production keeps running when ingredients are missing or the 
 - Small window on the left lists all paused recipes with the reason, e.g. which ingredients are missing (Alt+O to show or hide)
 - Short warning when an ingredient of a running recipe drops below 10 %
 - Paused recipes are kept in the savegame
-- Singleplayer, multiplayer and dedicated servers supported
 
 ## Feedback
 
