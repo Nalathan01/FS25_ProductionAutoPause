@@ -48,6 +48,7 @@ Ce mod désactive automatiquement ces productions et les réactive dès que tous
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
 Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commentaires sur les autres sites de téléchargement ne peuvent pas être lus ni traités.]]></fr>
     </description>
+    <iconFilename>icon_ProductionAutoPause.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
         <sourceFile filename="scripts/ProductionAutoPauseEvent.lua"/>
