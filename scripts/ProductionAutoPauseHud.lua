@@ -48,22 +48,21 @@ function ProductionAutoPauseHud:setCameraLocked(isLocked)
             inputComponent:lock()
             self.lockedInputComponent = inputComponent
         end
-        self.frozeMission = false
-        if g_currentMission ~= nil and not g_currentMission.isPlayerFrozen then
-            g_currentMission.isPlayerFrozen = true
-            self.frozeMission = true
-        end
-    else
-        if self.lockedInputComponent ~= nil then
-            self.lockedInputComponent:unlock()
-            self.lockedInputComponent = nil
-        end
-        if self.frozeMission and g_currentMission ~= nil then
-            g_currentMission.isPlayerFrozen = false
-        end
-        self.frozeMission = false
+    elseif self.lockedInputComponent ~= nil then
+        self.lockedInputComponent:unlock()
+        self.lockedInputComponent = nil
     end
 end
+
+function ProductionAutoPauseHud.blockVehicleLook(camera, superFunc, ...)
+    if ProductionAutoPauseHud.isEditing then
+        return
+    end
+    return superFunc(camera, ...)
+end
+
+VehicleCamera.actionEventLookUpDown = Utils.overwrittenFunction(VehicleCamera.actionEventLookUpDown, ProductionAutoPauseHud.blockVehicleLook)
+VehicleCamera.actionEventLookLeftRight = Utils.overwrittenFunction(VehicleCamera.actionEventLookLeftRight, ProductionAutoPauseHud.blockVehicleLook)
 
 function ProductionAutoPauseHud:getSettingsDirectory()
     if g_modSettingsDirectory == nil then
