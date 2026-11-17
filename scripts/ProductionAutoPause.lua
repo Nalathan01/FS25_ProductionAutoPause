@@ -173,7 +173,7 @@ end
 
 function ProductionAutoPause:draw()
     if ProductionAutoPauseHud ~= nil then
-        ProductionAutoPauseHud:draw(self.entries)
+        ProductionAutoPauseHud:drawList(self.entries)
     end
 end
 
@@ -296,5 +296,10 @@ PlayerInputComponent.registerGlobalPlayerActionEvents = Utils.appendedFunction(P
     local _, eventId = g_inputBinding:registerActionEvent(InputAction.PAP_TOGGLE_HUD, ProductionAutoPauseHud, ProductionAutoPauseHud.onToggleAction, false, true, false, true)
     if eventId ~= nil then
         g_inputBinding:setActionEventTextVisibility(eventId, false)
+    end
+
+    local _, moveEventId = g_inputBinding:registerActionEvent(InputAction.PAP_MOVE_HUD, ProductionAutoPauseHud, ProductionAutoPauseHud.onMoveAction, false, true, false, true)
+    if moveEventId ~= nil then
+        g_inputBinding:setActionEventTextVisibility(moveEventId, false)
     end
 end)

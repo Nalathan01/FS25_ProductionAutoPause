@@ -8,7 +8,7 @@ In the base game a production keeps running when ingredients are missing or the 
 - Switches it back on automatically once all ingredients are there and the output has room again
 - Only touches recipes you switched on yourself, recipes you switched off stay off
 - Directly sold outputs never count as full
-- Small window on the left lists all paused recipes with the reason, e.g. which ingredients are missing (Alt+O to show or hide)
+- Small window on the left lists all paused recipes with the reason, e.g. which ingredients are missing (Alt+O to show or hide, Ctrl+O to move it with the mouse)
 - Short warning when an ingredient of a running recipe drops below 10 %
 - Paused recipes are kept in the savegame
 
