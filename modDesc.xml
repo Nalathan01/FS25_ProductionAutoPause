@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <modDesc descVersion="116">
     <author>Nalathan</author>
-    <version>0.9.0.0</version>
+    <version>0.9.1.0</version>
     <title>
         <en>Production Auto Pause</en>
         <de>Produktionen Automatisch Pausieren</de>
@@ -19,7 +19,11 @@ This mod switches such productions off automatically and switches them back on a
 - Paused productions are kept in the savegame.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
-Bug reports please only via GitHub or Forbidden Mods. Comments on other download sites cannot be read or answered.]]></en>
+Bug reports please only via GitHub or Forbidden Mods. Comments on other download sites cannot be read or answered.
+
+Changelog 0.9.1.0:
+- The paused productions window can now be moved with the mouse (Ctrl+O), its position is saved
+- Hiding the window with Alt+O is now remembered]]></en>
         <de><![CDATA[Im Grundspiel läuft eine Produktion weiter, wenn Zutaten fehlen oder das Ausgangslager voll ist. Sie stellt dann nichts her, kostet aber weiter jede Stunde Geld und bremst die anderen Produktionen im selben Gebäude.
 
 Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald alle Zutaten da sind und im Ausgangslager wieder Platz ist.
@@ -31,7 +35,11 @@ Diese Mod schaltet solche Produktionen automatisch ab und wieder ein, sobald all
 - Pausierte Produktionen bleiben im Spielstand erhalten.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
-Fehlermeldungen bitte nur über GitHub oder Forbidden Mods. Kommentare auf anderen Download-Seiten können nicht gelesen oder beantwortet werden.]]></de>
+Fehlermeldungen bitte nur über GitHub oder Forbidden Mods. Kommentare auf anderen Download-Seiten können nicht gelesen oder beantwortet werden.
+
+Changelog 0.9.1.0:
+- Das Fenster mit den pausierten Produktionen lässt sich jetzt mit der Maus verschieben (Strg+O), die Position wird gespeichert
+- Das Ausblenden mit Alt+O bleibt jetzt gespeichert]]></de>
         <fr><![CDATA[Dans le jeu de base, une production continue de tourner lorsqu'il manque des ingrédients ou que le stockage de sortie est plein. Elle ne produit rien, mais coûte toujours de l'argent chaque heure et ralentit les autres productions du même bâtiment.
 
 Ce mod désactive automatiquement ces productions et les réactive dès que tous les ingrédients sont disponibles et qu'il y a de nouveau de la place dans le stockage de sortie.
@@ -43,7 +51,11 @@ Ce mod désactive automatiquement ces productions et les réactive dès que tous
 - Les productions en pause sont conservées dans la sauvegarde.
 
 GitHub: https://github.com/Nalathan01/FS25_ProductionAutoPause/issues
-Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commentaires sur les autres sites de téléchargement ne peuvent pas être lus ni traités.]]></fr>
+Merci de signaler les bugs uniquement via GitHub ou Forbidden Mods. Les commentaires sur les autres sites de téléchargement ne peuvent pas être lus ni traités.
+
+Changelog 0.9.1.0 :
+- La fenêtre des productions en pause peut maintenant être déplacée avec la souris (Ctrl+O), sa position est enregistrée
+- Le masquage avec Alt+O est maintenant conservé]]></fr>
     </description>
     <iconFilename>icon_ProductionAutoPause.dds</iconFilename>
     <multiplayer supported="true"/>
