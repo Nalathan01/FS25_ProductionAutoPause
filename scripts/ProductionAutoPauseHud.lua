@@ -32,9 +32,36 @@ function ProductionAutoPauseHud:setEditing(isEditing)
     self.isEditing = isEditing
     self.isDragging = false
     g_inputBinding:setShowMouseCursor(isEditing)
+    self:setCameraLocked(isEditing)
 
     if not isEditing then
         self:saveSettings()
+    end
+end
+
+function ProductionAutoPauseHud:setCameraLocked(isLocked)
+    local inputComponent = g_localPlayer ~= nil and g_localPlayer.inputComponent or nil
+
+    if isLocked then
+        self.lockedInputComponent = nil
+        if inputComponent ~= nil and not inputComponent.locked then
+            inputComponent:lock()
+            self.lockedInputComponent = inputComponent
+        end
+        self.frozeMission = false
+        if g_currentMission ~= nil and not g_currentMission.isPlayerFrozen then
+            g_currentMission.isPlayerFrozen = true
+            self.frozeMission = true
+        end
+    else
+        if self.lockedInputComponent ~= nil then
+            self.lockedInputComponent:unlock()
+            self.lockedInputComponent = nil
+        end
+        if self.frozeMission and g_currentMission ~= nil then
+            g_currentMission.isPlayerFrozen = false
+        end
+        self.frozeMission = false
     end
 end
 
@@ -93,6 +120,7 @@ function ProductionAutoPauseHud:deleteMap()
         self.isEditing = false
         self.isDragging = false
         g_inputBinding:setShowMouseCursor(false)
+        self:setCameraLocked(false)
     end
     self.box = nil
 end
